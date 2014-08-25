@@ -19,7 +19,8 @@ class OpauthController extends ContentController {
 		),
 		$url_handlers = array(
 			'finished' => 'finished',
-		);
+		),
+		$login_form_name = 'OpauthLoginForm_LoginForm';
 
 	/**
 	 * Bitwise indicators to extensions what sort of action is happening
@@ -353,8 +354,9 @@ class OpauthController extends ContentController {
 	 */
 	protected function handleOpauthException(OpauthValidationException $e) {
 		$data = $e->getData();
-		$loginFormName = 'OpauthLoginForm_LoginForm';
-		$message;
+
+		$loginFormName = $this->config()->login_form_name;
+
 		switch($e->getCode()) {
 			case 1: // provider error
 				$message = _t(
@@ -378,7 +380,7 @@ class OpauthController extends ContentController {
 		}
 		// Set form message, redirect to login with permission failure
 		Form::messageForForm($loginFormName, $message, 'bad');
-		// always redirect to login
+		// always redirect to login-
 		Security::permissionFailure($this, $message);
 	}
 
